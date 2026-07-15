@@ -1,13 +1,17 @@
 <?php
 // config/database.php
 
-$host     = "localhost";
-$username = "root";
-$password = "";
-$database = "kasir";
+$host = getenv('DB_HOST') ?: 'mysql.railway.internal';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') ?: 'EWMTkEqJKsszBNckJeZmLKLqGHBjuBtX';
+$name = getenv('DB_NAME') ?: 'railway';
+$port = getenv('DB_PORT') ?: '3306';
 
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) { die("Koneksi gagal: " . $conn->connect_error); }
+$conn = new mysqli($host, $user, $pass, $name, $port);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
 
 function getEncryptionKey($conn) {
     $res = $conn->query("SELECT password FROM user WHERE role = 'owner' LIMIT 1");
